@@ -1,0 +1,1766 @@
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: bloque_preguntas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.bloque_preguntas (
+    id integer NOT NULL,
+    numero integer NOT NULL,
+    estado character varying(50) NOT NULL,
+    cant_preguntas integer NOT NULL,
+    bloque_final boolean NOT NULL,
+    id_cuestionario integer NOT NULL
+);
+
+
+ALTER TABLE public.bloque_preguntas OWNER TO postgres;
+
+--
+-- Name: bloque_preguntas_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.bloque_preguntas_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.bloque_preguntas_id_seq OWNER TO postgres;
+
+--
+-- Name: bloque_preguntas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.bloque_preguntas_id_seq OWNED BY public.bloque_preguntas.id;
+
+
+--
+-- Name: candidato; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.candidato (
+    id integer NOT NULL,
+    numero_candidato integer NOT NULL,
+    tipo_documento character varying(50) NOT NULL,
+    documento character varying(50) NOT NULL,
+    apellido character varying(50) NOT NULL,
+    nombre character varying(50) NOT NULL,
+    fecha_nac date NOT NULL,
+    nacionalidad character varying(50) NOT NULL,
+    email character varying(50) NOT NULL,
+    escolaridad character varying(50) NOT NULL,
+    eliminado boolean NOT NULL,
+    id_cuestionario_actual integer
+);
+
+
+ALTER TABLE public.candidato OWNER TO postgres;
+
+--
+-- Name: candidato_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.candidato_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.candidato_id_seq OWNER TO postgres;
+
+--
+-- Name: candidato_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.candidato_id_seq OWNED BY public.candidato.id;
+
+
+--
+-- Name: competencia; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.competencia (
+    id integer NOT NULL,
+    codigo integer NOT NULL,
+    nombre character varying(50) NOT NULL,
+    descripcion character varying(200) NOT NULL,
+    tipo_competencia character varying(50) NOT NULL,
+    eliminado boolean NOT NULL,
+    id_registro_auditoria integer
+);
+
+
+ALTER TABLE public.competencia OWNER TO postgres;
+
+--
+-- Name: competencia_evaluacion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.competencia_evaluacion (
+    id integer NOT NULL,
+    codigo integer NOT NULL,
+    nombre character varying(50) NOT NULL,
+    descripcion character varying(200) NOT NULL,
+    tipo_competencia character varying(50) NOT NULL,
+    eliminado boolean NOT NULL,
+    puntaje_minimo integer,
+    id_competencia integer NOT NULL,
+    id_puesto_evaluacion integer
+);
+
+
+ALTER TABLE public.competencia_evaluacion OWNER TO postgres;
+
+--
+-- Name: competencia_evaluacion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.competencia_evaluacion_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.competencia_evaluacion_id_seq OWNER TO postgres;
+
+--
+-- Name: competencia_evaluacion_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.competencia_evaluacion_id_seq OWNED BY public.competencia_evaluacion.id;
+
+
+--
+-- Name: competencia_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.competencia_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.competencia_id_seq OWNER TO postgres;
+
+--
+-- Name: competencia_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.competencia_id_seq OWNED BY public.competencia.id;
+
+
+--
+-- Name: consultor; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.consultor (
+    id integer NOT NULL,
+    usuario character varying(50) NOT NULL,
+    apellido character varying(50) NOT NULL,
+    nombre character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.consultor OWNER TO postgres;
+
+--
+-- Name: consultor_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.consultor_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.consultor_id_seq OWNER TO postgres;
+
+--
+-- Name: consultor_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.consultor_id_seq OWNED BY public.consultor.id;
+
+
+--
+-- Name: cuestionario; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.cuestionario (
+    id integer NOT NULL,
+    clave character varying(50) NOT NULL,
+    estado character varying(50) NOT NULL,
+    puntaje_obtenido numeric,
+    tiempo_maximo_permitido integer NOT NULL,
+    fecha_hora_inicio date,
+    fecha_hora_fin date,
+    fecha_hora_no_finalizacion date,
+    accesos_permitidos integer NOT NULL,
+    veces_accedidos integer NOT NULL,
+    instrucciones character varying(250) NOT NULL,
+    id_evaluacion integer,
+    id_registro_ejecucion integer,
+    id_candidato integer NOT NULL
+);
+
+
+ALTER TABLE public.cuestionario OWNER TO postgres;
+
+--
+-- Name: cuestionario_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.cuestionario_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.cuestionario_id_seq OWNER TO postgres;
+
+--
+-- Name: cuestionario_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.cuestionario_id_seq OWNED BY public.cuestionario.id;
+
+
+--
+-- Name: evaluacion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.evaluacion (
+    id integer NOT NULL,
+    fecha_hora_inicio date NOT NULL,
+    fecha_hora_fin date NOT NULL,
+    id_puesto_evaluacion integer
+);
+
+
+ALTER TABLE public.evaluacion OWNER TO postgres;
+
+--
+-- Name: evaluacion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.evaluacion_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.evaluacion_id_seq OWNER TO postgres;
+
+--
+-- Name: evaluacion_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.evaluacion_id_seq OWNED BY public.evaluacion.id;
+
+
+--
+-- Name: factor; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.factor (
+    id integer NOT NULL,
+    codigo integer NOT NULL,
+    nombre character varying(50) NOT NULL,
+    descripcion character varying(200) NOT NULL,
+    orden integer NOT NULL,
+    eliminado boolean NOT NULL,
+    id_competencia integer NOT NULL,
+    id_registro_auditoria integer
+);
+
+
+ALTER TABLE public.factor OWNER TO postgres;
+
+--
+-- Name: factor_evaluacion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.factor_evaluacion (
+    id integer NOT NULL,
+    codigo integer NOT NULL,
+    nombre character varying(50) NOT NULL,
+    descripcion character varying(200) NOT NULL,
+    orden integer NOT NULL,
+    eliminado boolean NOT NULL,
+    id_competencia_evaluacion integer,
+    id_factor integer NOT NULL
+);
+
+
+ALTER TABLE public.factor_evaluacion OWNER TO postgres;
+
+--
+-- Name: factor_evaluacion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.factor_evaluacion_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.factor_evaluacion_id_seq OWNER TO postgres;
+
+--
+-- Name: factor_evaluacion_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.factor_evaluacion_id_seq OWNED BY public.factor_evaluacion.id;
+
+
+--
+-- Name: factor_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.factor_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.factor_id_seq OWNER TO postgres;
+
+--
+-- Name: factor_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.factor_id_seq OWNED BY public.factor.id;
+
+
+--
+-- Name: item_opcion_respuesta; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.item_opcion_respuesta (
+    id integer NOT NULL,
+    descripcion character varying(200) NOT NULL,
+    orden_visualizacion integer NOT NULL,
+    id_opcion_respuesta integer NOT NULL
+);
+
+
+ALTER TABLE public.item_opcion_respuesta OWNER TO postgres;
+
+--
+-- Name: item_opcion_respuesta_cuestionario; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.item_opcion_respuesta_cuestionario (
+    id integer NOT NULL,
+    descripcion character varying(200) NOT NULL,
+    orden_visualizacion integer NOT NULL,
+    id_opcion_respuesta_cuestionario integer,
+    id_item_opcion_respuesta integer
+);
+
+
+ALTER TABLE public.item_opcion_respuesta_cuestionario OWNER TO postgres;
+
+--
+-- Name: item_opcion_respuesta_cuestionario_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.item_opcion_respuesta_cuestionario_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.item_opcion_respuesta_cuestionario_id_seq OWNER TO postgres;
+
+--
+-- Name: item_opcion_respuesta_cuestionario_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.item_opcion_respuesta_cuestionario_id_seq OWNED BY public.item_opcion_respuesta_cuestionario.id;
+
+
+--
+-- Name: item_opcion_respuesta_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.item_opcion_respuesta_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.item_opcion_respuesta_id_seq OWNER TO postgres;
+
+--
+-- Name: item_opcion_respuesta_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.item_opcion_respuesta_id_seq OWNED BY public.item_opcion_respuesta.id;
+
+
+--
+-- Name: opcion_respuesta; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.opcion_respuesta (
+    id integer NOT NULL,
+    nombre character varying(50) NOT NULL,
+    descripcion character varying(200) NOT NULL,
+    eliminado boolean NOT NULL,
+    id_registro_auditoria integer
+);
+
+
+ALTER TABLE public.opcion_respuesta OWNER TO postgres;
+
+--
+-- Name: opcion_respuesta_cuestionario; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.opcion_respuesta_cuestionario (
+    id integer NOT NULL,
+    nombre character varying(50) NOT NULL,
+    descripcion character varying(200) NOT NULL,
+    eliminado boolean NOT NULL,
+    id_opcion_respuesta integer
+);
+
+
+ALTER TABLE public.opcion_respuesta_cuestionario OWNER TO postgres;
+
+--
+-- Name: opcion_respuesta_cuestionario_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.opcion_respuesta_cuestionario_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.opcion_respuesta_cuestionario_id_seq OWNER TO postgres;
+
+--
+-- Name: opcion_respuesta_cuestionario_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.opcion_respuesta_cuestionario_id_seq OWNED BY public.opcion_respuesta_cuestionario.id;
+
+
+--
+-- Name: opcion_respuesta_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.opcion_respuesta_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.opcion_respuesta_id_seq OWNER TO postgres;
+
+--
+-- Name: opcion_respuesta_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.opcion_respuesta_id_seq OWNED BY public.opcion_respuesta.id;
+
+
+--
+-- Name: parametros_del_sistema; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.parametros_del_sistema (
+    id integer NOT NULL,
+    instrucciones character varying(250) NOT NULL,
+    cant_preguntas integer NOT NULL,
+    accesos_permitidos integer NOT NULL,
+    tiempo_maximo_permitido integer NOT NULL,
+    tiempo_maximo_activo_permitido integer NOT NULL
+);
+
+
+ALTER TABLE public.parametros_del_sistema OWNER TO postgres;
+
+--
+-- Name: parametros_del_sistema_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.parametros_del_sistema_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.parametros_del_sistema_id_seq OWNER TO postgres;
+
+--
+-- Name: parametros_del_sistema_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.parametros_del_sistema_id_seq OWNED BY public.parametros_del_sistema.id;
+
+
+--
+-- Name: ponderacion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ponderacion (
+    id integer NOT NULL,
+    id_pregunta integer,
+    id_item_opcion_respuesta integer NOT NULL,
+    ponderacion integer NOT NULL
+);
+
+
+ALTER TABLE public.ponderacion OWNER TO postgres;
+
+--
+-- Name: ponderacion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.ponderacion_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ponderacion_id_seq OWNER TO postgres;
+
+--
+-- Name: ponderacion_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.ponderacion_id_seq OWNED BY public.ponderacion.id;
+
+
+--
+-- Name: ponderacioncuestionario; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ponderacioncuestionario (
+    id integer NOT NULL,
+    id_pregunta_cuestionario integer,
+    id_item_opcion_respuesta_cuestionario integer,
+    ponderacion integer
+);
+
+
+ALTER TABLE public.ponderacioncuestionario OWNER TO postgres;
+
+--
+-- Name: ponderacioncuestionario_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.ponderacioncuestionario_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ponderacioncuestionario_id_seq OWNER TO postgres;
+
+--
+-- Name: ponderacioncuestionario_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.ponderacioncuestionario_id_seq OWNED BY public.ponderacioncuestionario.id;
+
+
+--
+-- Name: pregunta; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.pregunta (
+    id integer NOT NULL,
+    nombre character varying(50) NOT NULL,
+    pregunta character varying(200) NOT NULL,
+    descripcion character varying(200) NOT NULL,
+    eliminado boolean NOT NULL,
+    id_factor integer NOT NULL,
+    id_registro_auditoria integer,
+    id_opcion_respuesta integer
+);
+
+
+ALTER TABLE public.pregunta OWNER TO postgres;
+
+--
+-- Name: pregunta_cuestionario; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.pregunta_cuestionario (
+    id integer NOT NULL,
+    nombre character varying(50) NOT NULL,
+    pregunta character varying(200) NOT NULL,
+    descripcion character varying(200) NOT NULL,
+    eliminado boolean NOT NULL,
+    id_factor_evaluacion integer,
+    id_pregunta integer,
+    id_opcion_respuesta_cuestionario integer,
+    id_bloque_preguntas integer
+);
+
+
+ALTER TABLE public.pregunta_cuestionario OWNER TO postgres;
+
+--
+-- Name: pregunta_cuestionario_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.pregunta_cuestionario_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pregunta_cuestionario_id_seq OWNER TO postgres;
+
+--
+-- Name: pregunta_cuestionario_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.pregunta_cuestionario_id_seq OWNED BY public.pregunta_cuestionario.id;
+
+
+--
+-- Name: pregunta_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.pregunta_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pregunta_id_seq OWNER TO postgres;
+
+--
+-- Name: pregunta_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.pregunta_id_seq OWNED BY public.pregunta.id;
+
+
+--
+-- Name: puesto; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.puesto (
+    id integer NOT NULL,
+    codigo integer NOT NULL,
+    nombre character varying(50) NOT NULL,
+    descripcion character varying(200) NOT NULL,
+    empresa character varying(50) NOT NULL,
+    eliminado boolean NOT NULL,
+    id_registro_auditoria integer
+);
+
+
+ALTER TABLE public.puesto OWNER TO postgres;
+
+--
+-- Name: puesto_evaluacion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.puesto_evaluacion (
+    id integer NOT NULL,
+    codigo integer NOT NULL,
+    nombre character varying(50) NOT NULL,
+    descripcion character varying(200) NOT NULL,
+    empresa character varying(50) NOT NULL,
+    eliminado boolean NOT NULL,
+    id_puesto integer NOT NULL
+);
+
+
+ALTER TABLE public.puesto_evaluacion OWNER TO postgres;
+
+--
+-- Name: puesto_evaluacion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.puesto_evaluacion_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.puesto_evaluacion_id_seq OWNER TO postgres;
+
+--
+-- Name: puesto_evaluacion_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.puesto_evaluacion_id_seq OWNED BY public.puesto_evaluacion.id;
+
+
+--
+-- Name: puesto_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.puesto_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.puesto_id_seq OWNER TO postgres;
+
+--
+-- Name: puesto_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.puesto_id_seq OWNED BY public.puesto.id;
+
+
+--
+-- Name: puntaje; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.puntaje (
+    id integer NOT NULL,
+    id_cuestionario integer,
+    id_competencia_evaluacion integer NOT NULL,
+    puntaje numeric
+);
+
+
+ALTER TABLE public.puntaje OWNER TO postgres;
+
+--
+-- Name: puntaje_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.puntaje_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.puntaje_id_seq OWNER TO postgres;
+
+--
+-- Name: puntaje_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.puntaje_id_seq OWNED BY public.puntaje.id;
+
+
+--
+-- Name: puntuacion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.puntuacion (
+    id integer NOT NULL,
+    id_puesto integer,
+    id_competencia integer NOT NULL,
+    puntaje_minimo integer NOT NULL
+);
+
+
+ALTER TABLE public.puntuacion OWNER TO postgres;
+
+--
+-- Name: puntuacion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.puntuacion_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.puntuacion_id_seq OWNER TO postgres;
+
+--
+-- Name: puntuacion_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.puntuacion_id_seq OWNED BY public.puntuacion.id;
+
+
+--
+-- Name: registro_auditoria; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.registro_auditoria (
+    id integer NOT NULL,
+    fecha_eliminacion date NOT NULL,
+    tipo_entidad character varying(50) NOT NULL,
+    id_consultor integer
+);
+
+
+ALTER TABLE public.registro_auditoria OWNER TO postgres;
+
+--
+-- Name: registro_auditoria_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.registro_auditoria_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.registro_auditoria_id_seq OWNER TO postgres;
+
+--
+-- Name: registro_auditoria_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.registro_auditoria_id_seq OWNED BY public.registro_auditoria.id;
+
+
+--
+-- Name: registro_ejecucion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.registro_ejecucion (
+    id integer NOT NULL,
+    fecha_hora date NOT NULL,
+    accion character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.registro_ejecucion OWNER TO postgres;
+
+--
+-- Name: registro_ejecucion_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.registro_ejecucion_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.registro_ejecucion_id_seq OWNER TO postgres;
+
+--
+-- Name: registro_ejecucion_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.registro_ejecucion_id_seq OWNED BY public.registro_ejecucion.id;
+
+
+--
+-- Name: respuesta; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.respuesta (
+    id integer NOT NULL,
+    id_pregunta_cuestionario integer NOT NULL,
+    id_item_opcion_respuesta_cuestionario integer NOT NULL
+);
+
+
+ALTER TABLE public.respuesta OWNER TO postgres;
+
+--
+-- Name: respuesta_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.respuesta_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.respuesta_id_seq OWNER TO postgres;
+
+--
+-- Name: respuesta_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.respuesta_id_seq OWNED BY public.respuesta.id;
+
+
+--
+-- Name: bloque_preguntas id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bloque_preguntas ALTER COLUMN id SET DEFAULT nextval('public.bloque_preguntas_id_seq'::regclass);
+
+
+--
+-- Name: candidato id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.candidato ALTER COLUMN id SET DEFAULT nextval('public.candidato_id_seq'::regclass);
+
+
+--
+-- Name: competencia id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.competencia ALTER COLUMN id SET DEFAULT nextval('public.competencia_id_seq'::regclass);
+
+
+--
+-- Name: competencia_evaluacion id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.competencia_evaluacion ALTER COLUMN id SET DEFAULT nextval('public.competencia_evaluacion_id_seq'::regclass);
+
+
+--
+-- Name: consultor id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.consultor ALTER COLUMN id SET DEFAULT nextval('public.consultor_id_seq'::regclass);
+
+
+--
+-- Name: cuestionario id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cuestionario ALTER COLUMN id SET DEFAULT nextval('public.cuestionario_id_seq'::regclass);
+
+
+--
+-- Name: evaluacion id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.evaluacion ALTER COLUMN id SET DEFAULT nextval('public.evaluacion_id_seq'::regclass);
+
+
+--
+-- Name: factor id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.factor ALTER COLUMN id SET DEFAULT nextval('public.factor_id_seq'::regclass);
+
+
+--
+-- Name: factor_evaluacion id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.factor_evaluacion ALTER COLUMN id SET DEFAULT nextval('public.factor_evaluacion_id_seq'::regclass);
+
+
+--
+-- Name: item_opcion_respuesta id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.item_opcion_respuesta ALTER COLUMN id SET DEFAULT nextval('public.item_opcion_respuesta_id_seq'::regclass);
+
+
+--
+-- Name: item_opcion_respuesta_cuestionario id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.item_opcion_respuesta_cuestionario ALTER COLUMN id SET DEFAULT nextval('public.item_opcion_respuesta_cuestionario_id_seq'::regclass);
+
+
+--
+-- Name: opcion_respuesta id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opcion_respuesta ALTER COLUMN id SET DEFAULT nextval('public.opcion_respuesta_id_seq'::regclass);
+
+
+--
+-- Name: opcion_respuesta_cuestionario id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opcion_respuesta_cuestionario ALTER COLUMN id SET DEFAULT nextval('public.opcion_respuesta_cuestionario_id_seq'::regclass);
+
+
+--
+-- Name: parametros_del_sistema id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.parametros_del_sistema ALTER COLUMN id SET DEFAULT nextval('public.parametros_del_sistema_id_seq'::regclass);
+
+
+--
+-- Name: ponderacion id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ponderacion ALTER COLUMN id SET DEFAULT nextval('public.ponderacion_id_seq'::regclass);
+
+
+--
+-- Name: ponderacioncuestionario id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ponderacioncuestionario ALTER COLUMN id SET DEFAULT nextval('public.ponderacioncuestionario_id_seq'::regclass);
+
+
+--
+-- Name: pregunta id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pregunta ALTER COLUMN id SET DEFAULT nextval('public.pregunta_id_seq'::regclass);
+
+
+--
+-- Name: pregunta_cuestionario id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pregunta_cuestionario ALTER COLUMN id SET DEFAULT nextval('public.pregunta_cuestionario_id_seq'::regclass);
+
+
+--
+-- Name: puesto id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puesto ALTER COLUMN id SET DEFAULT nextval('public.puesto_id_seq'::regclass);
+
+
+--
+-- Name: puesto_evaluacion id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puesto_evaluacion ALTER COLUMN id SET DEFAULT nextval('public.puesto_evaluacion_id_seq'::regclass);
+
+
+--
+-- Name: puntaje id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puntaje ALTER COLUMN id SET DEFAULT nextval('public.puntaje_id_seq'::regclass);
+
+
+--
+-- Name: puntuacion id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puntuacion ALTER COLUMN id SET DEFAULT nextval('public.puntuacion_id_seq'::regclass);
+
+
+--
+-- Name: registro_auditoria id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.registro_auditoria ALTER COLUMN id SET DEFAULT nextval('public.registro_auditoria_id_seq'::regclass);
+
+
+--
+-- Name: registro_ejecucion id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.registro_ejecucion ALTER COLUMN id SET DEFAULT nextval('public.registro_ejecucion_id_seq'::regclass);
+
+
+--
+-- Name: respuesta id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.respuesta ALTER COLUMN id SET DEFAULT nextval('public.respuesta_id_seq'::regclass);
+
+
+--
+-- Name: bloque_preguntas bloque_preguntas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bloque_preguntas
+    ADD CONSTRAINT bloque_preguntas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: candidato candidato_numero_candidato_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.candidato
+    ADD CONSTRAINT candidato_numero_candidato_key UNIQUE (numero_candidato);
+
+
+--
+-- Name: candidato candidato_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.candidato
+    ADD CONSTRAINT candidato_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: competencia competencia_codigo_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.competencia
+    ADD CONSTRAINT competencia_codigo_key UNIQUE (codigo);
+
+
+--
+-- Name: competencia_evaluacion competencia_evaluacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.competencia_evaluacion
+    ADD CONSTRAINT competencia_evaluacion_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: competencia competencia_nombre_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.competencia
+    ADD CONSTRAINT competencia_nombre_key UNIQUE (nombre);
+
+
+--
+-- Name: competencia competencia_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.competencia
+    ADD CONSTRAINT competencia_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: consultor consultor_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.consultor
+    ADD CONSTRAINT consultor_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: consultor consultor_usuario_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.consultor
+    ADD CONSTRAINT consultor_usuario_key UNIQUE (usuario);
+
+
+--
+-- Name: cuestionario cuestionario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cuestionario
+    ADD CONSTRAINT cuestionario_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: evaluacion evaluacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.evaluacion
+    ADD CONSTRAINT evaluacion_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: factor factor_codigo_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.factor
+    ADD CONSTRAINT factor_codigo_key UNIQUE (codigo);
+
+
+--
+-- Name: factor_evaluacion factor_evaluacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.factor_evaluacion
+    ADD CONSTRAINT factor_evaluacion_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: factor factor_nombre_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.factor
+    ADD CONSTRAINT factor_nombre_key UNIQUE (nombre);
+
+
+--
+-- Name: factor factor_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.factor
+    ADD CONSTRAINT factor_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: item_opcion_respuesta_cuestionario item_opcion_respuesta_cuestionario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.item_opcion_respuesta_cuestionario
+    ADD CONSTRAINT item_opcion_respuesta_cuestionario_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: item_opcion_respuesta item_opcion_respuesta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.item_opcion_respuesta
+    ADD CONSTRAINT item_opcion_respuesta_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: opcion_respuesta_cuestionario opcion_respuesta_cuestionario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opcion_respuesta_cuestionario
+    ADD CONSTRAINT opcion_respuesta_cuestionario_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: opcion_respuesta opcion_respuesta_nombre_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opcion_respuesta
+    ADD CONSTRAINT opcion_respuesta_nombre_key UNIQUE (nombre);
+
+
+--
+-- Name: opcion_respuesta opcion_respuesta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opcion_respuesta
+    ADD CONSTRAINT opcion_respuesta_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: parametros_del_sistema parametros_del_sistema_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.parametros_del_sistema
+    ADD CONSTRAINT parametros_del_sistema_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ponderacion ponderacion_id_pregunta_id_item_opcion_respuesta_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ponderacion
+    ADD CONSTRAINT ponderacion_id_pregunta_id_item_opcion_respuesta_key UNIQUE (id_pregunta, id_item_opcion_respuesta);
+
+
+--
+-- Name: ponderacion ponderacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ponderacion
+    ADD CONSTRAINT ponderacion_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ponderacioncuestionario ponderacioncuestionario_id_pregunta_cuestionario_id_item_op_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ponderacioncuestionario
+    ADD CONSTRAINT ponderacioncuestionario_id_pregunta_cuestionario_id_item_op_key UNIQUE (id_pregunta_cuestionario, id_item_opcion_respuesta_cuestionario);
+
+
+--
+-- Name: ponderacioncuestionario ponderacioncuestionario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ponderacioncuestionario
+    ADD CONSTRAINT ponderacioncuestionario_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pregunta_cuestionario pregunta_cuestionario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pregunta_cuestionario
+    ADD CONSTRAINT pregunta_cuestionario_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pregunta pregunta_nombre_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pregunta
+    ADD CONSTRAINT pregunta_nombre_key UNIQUE (nombre);
+
+
+--
+-- Name: pregunta pregunta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pregunta
+    ADD CONSTRAINT pregunta_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pregunta pregunta_pregunta_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pregunta
+    ADD CONSTRAINT pregunta_pregunta_key UNIQUE (pregunta);
+
+
+--
+-- Name: puesto puesto_codigo_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puesto
+    ADD CONSTRAINT puesto_codigo_key UNIQUE (codigo);
+
+
+--
+-- Name: puesto_evaluacion puesto_evaluacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puesto_evaluacion
+    ADD CONSTRAINT puesto_evaluacion_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: puesto puesto_nombre_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puesto
+    ADD CONSTRAINT puesto_nombre_key UNIQUE (nombre);
+
+
+--
+-- Name: puesto puesto_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puesto
+    ADD CONSTRAINT puesto_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: puntaje puntaje_id_cuestionario_id_competencia_evaluacion_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puntaje
+    ADD CONSTRAINT puntaje_id_cuestionario_id_competencia_evaluacion_key UNIQUE (id_cuestionario, id_competencia_evaluacion);
+
+
+--
+-- Name: puntaje puntaje_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puntaje
+    ADD CONSTRAINT puntaje_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: puntuacion puntuacion_id_puesto_id_competencia_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puntuacion
+    ADD CONSTRAINT puntuacion_id_puesto_id_competencia_key UNIQUE (id_puesto, id_competencia);
+
+
+--
+-- Name: puntuacion puntuacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puntuacion
+    ADD CONSTRAINT puntuacion_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: registro_auditoria registro_auditoria_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.registro_auditoria
+    ADD CONSTRAINT registro_auditoria_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: registro_ejecucion registro_ejecucion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.registro_ejecucion
+    ADD CONSTRAINT registro_ejecucion_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: respuesta respuesta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.respuesta
+    ADD CONSTRAINT respuesta_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: bloque_preguntas bloque_preguntas_id_cuestionario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bloque_preguntas
+    ADD CONSTRAINT bloque_preguntas_id_cuestionario_fkey FOREIGN KEY (id_cuestionario) REFERENCES public.cuestionario(id);
+
+
+--
+-- Name: candidato candidato_id_cuestionario_actual_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.candidato
+    ADD CONSTRAINT candidato_id_cuestionario_actual_fkey FOREIGN KEY (id_cuestionario_actual) REFERENCES public.cuestionario(id);
+
+
+--
+-- Name: competencia_evaluacion competencia_evaluacion_id_competencia_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.competencia_evaluacion
+    ADD CONSTRAINT competencia_evaluacion_id_competencia_fkey FOREIGN KEY (id_competencia) REFERENCES public.competencia(id);
+
+
+--
+-- Name: competencia_evaluacion competencia_evaluacion_id_puesto_evaluacion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.competencia_evaluacion
+    ADD CONSTRAINT competencia_evaluacion_id_puesto_evaluacion_fkey FOREIGN KEY (id_puesto_evaluacion) REFERENCES public.puesto_evaluacion(id);
+
+
+--
+-- Name: competencia competencia_id_registro_auditoria_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.competencia
+    ADD CONSTRAINT competencia_id_registro_auditoria_fkey FOREIGN KEY (id_registro_auditoria) REFERENCES public.registro_auditoria(id);
+
+
+--
+-- Name: cuestionario cuestionario_id_candidato_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cuestionario
+    ADD CONSTRAINT cuestionario_id_candidato_fkey FOREIGN KEY (id_candidato) REFERENCES public.candidato(id);
+
+
+--
+-- Name: cuestionario cuestionario_id_evaluacion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cuestionario
+    ADD CONSTRAINT cuestionario_id_evaluacion_fkey FOREIGN KEY (id_evaluacion) REFERENCES public.evaluacion(id);
+
+
+--
+-- Name: cuestionario cuestionario_id_registro_ejecucion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cuestionario
+    ADD CONSTRAINT cuestionario_id_registro_ejecucion_fkey FOREIGN KEY (id_registro_ejecucion) REFERENCES public.registro_ejecucion(id);
+
+
+--
+-- Name: evaluacion evaluacion_id_puesto_evaluacion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.evaluacion
+    ADD CONSTRAINT evaluacion_id_puesto_evaluacion_fkey FOREIGN KEY (id_puesto_evaluacion) REFERENCES public.puesto_evaluacion(id);
+
+
+--
+-- Name: factor_evaluacion factor_evaluacion_id_competencia_evaluacion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.factor_evaluacion
+    ADD CONSTRAINT factor_evaluacion_id_competencia_evaluacion_fkey FOREIGN KEY (id_competencia_evaluacion) REFERENCES public.competencia_evaluacion(id);
+
+
+--
+-- Name: factor_evaluacion factor_evaluacion_id_factor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.factor_evaluacion
+    ADD CONSTRAINT factor_evaluacion_id_factor_fkey FOREIGN KEY (id_factor) REFERENCES public.factor(id);
+
+
+--
+-- Name: factor factor_id_competencia_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.factor
+    ADD CONSTRAINT factor_id_competencia_fkey FOREIGN KEY (id_competencia) REFERENCES public.competencia(id);
+
+
+--
+-- Name: factor factor_id_registro_auditoria_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.factor
+    ADD CONSTRAINT factor_id_registro_auditoria_fkey FOREIGN KEY (id_registro_auditoria) REFERENCES public.registro_auditoria(id);
+
+
+--
+-- Name: item_opcion_respuesta_cuestionario item_opcion_respuesta_cuestio_id_opcion_respuesta_cuestion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.item_opcion_respuesta_cuestionario
+    ADD CONSTRAINT item_opcion_respuesta_cuestio_id_opcion_respuesta_cuestion_fkey FOREIGN KEY (id_opcion_respuesta_cuestionario) REFERENCES public.opcion_respuesta_cuestionario(id);
+
+
+--
+-- Name: item_opcion_respuesta_cuestionario item_opcion_respuesta_cuestionari_id_item_opcion_respuesta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.item_opcion_respuesta_cuestionario
+    ADD CONSTRAINT item_opcion_respuesta_cuestionari_id_item_opcion_respuesta_fkey FOREIGN KEY (id_item_opcion_respuesta) REFERENCES public.item_opcion_respuesta(id);
+
+
+--
+-- Name: item_opcion_respuesta item_opcion_respuesta_id_opcion_respuesta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.item_opcion_respuesta
+    ADD CONSTRAINT item_opcion_respuesta_id_opcion_respuesta_fkey FOREIGN KEY (id_opcion_respuesta) REFERENCES public.opcion_respuesta(id);
+
+
+--
+-- Name: opcion_respuesta_cuestionario opcion_respuesta_cuestionario_id_opcion_respuesta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opcion_respuesta_cuestionario
+    ADD CONSTRAINT opcion_respuesta_cuestionario_id_opcion_respuesta_fkey FOREIGN KEY (id_opcion_respuesta) REFERENCES public.opcion_respuesta(id);
+
+
+--
+-- Name: opcion_respuesta opcion_respuesta_id_registro_auditoria_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.opcion_respuesta
+    ADD CONSTRAINT opcion_respuesta_id_registro_auditoria_fkey FOREIGN KEY (id_registro_auditoria) REFERENCES public.registro_auditoria(id);
+
+
+--
+-- Name: ponderacion ponderacion_id_item_opcion_respuesta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ponderacion
+    ADD CONSTRAINT ponderacion_id_item_opcion_respuesta_fkey FOREIGN KEY (id_item_opcion_respuesta) REFERENCES public.item_opcion_respuesta(id);
+
+
+--
+-- Name: ponderacion ponderacion_id_pregunta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ponderacion
+    ADD CONSTRAINT ponderacion_id_pregunta_fkey FOREIGN KEY (id_pregunta) REFERENCES public.pregunta(id);
+
+
+--
+-- Name: ponderacioncuestionario ponderacioncuestionario_id_item_opcion_respuesta_cuestiona_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ponderacioncuestionario
+    ADD CONSTRAINT ponderacioncuestionario_id_item_opcion_respuesta_cuestiona_fkey FOREIGN KEY (id_item_opcion_respuesta_cuestionario) REFERENCES public.item_opcion_respuesta_cuestionario(id);
+
+
+--
+-- Name: ponderacioncuestionario ponderacioncuestionario_id_pregunta_cuestionario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ponderacioncuestionario
+    ADD CONSTRAINT ponderacioncuestionario_id_pregunta_cuestionario_fkey FOREIGN KEY (id_pregunta_cuestionario) REFERENCES public.pregunta_cuestionario(id);
+
+
+--
+-- Name: pregunta_cuestionario pregunta_cuestionario_id_bloque_preguntas_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pregunta_cuestionario
+    ADD CONSTRAINT pregunta_cuestionario_id_bloque_preguntas_fkey FOREIGN KEY (id_bloque_preguntas) REFERENCES public.bloque_preguntas(id);
+
+
+--
+-- Name: pregunta_cuestionario pregunta_cuestionario_id_factor_evaluacion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pregunta_cuestionario
+    ADD CONSTRAINT pregunta_cuestionario_id_factor_evaluacion_fkey FOREIGN KEY (id_factor_evaluacion) REFERENCES public.factor_evaluacion(id);
+
+
+--
+-- Name: pregunta_cuestionario pregunta_cuestionario_id_opcion_respuesta_cuestionario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pregunta_cuestionario
+    ADD CONSTRAINT pregunta_cuestionario_id_opcion_respuesta_cuestionario_fkey FOREIGN KEY (id_opcion_respuesta_cuestionario) REFERENCES public.opcion_respuesta_cuestionario(id);
+
+
+--
+-- Name: pregunta_cuestionario pregunta_cuestionario_id_pregunta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pregunta_cuestionario
+    ADD CONSTRAINT pregunta_cuestionario_id_pregunta_fkey FOREIGN KEY (id_pregunta) REFERENCES public.pregunta(id);
+
+
+--
+-- Name: pregunta pregunta_id_factor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pregunta
+    ADD CONSTRAINT pregunta_id_factor_fkey FOREIGN KEY (id_factor) REFERENCES public.factor(id);
+
+
+--
+-- Name: pregunta pregunta_id_op_respuesta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pregunta
+    ADD CONSTRAINT pregunta_id_op_respuesta_fkey FOREIGN KEY (id_opcion_respuesta) REFERENCES public.opcion_respuesta(id);
+
+
+--
+-- Name: pregunta pregunta_id_registro_auditoria_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pregunta
+    ADD CONSTRAINT pregunta_id_registro_auditoria_fkey FOREIGN KEY (id_registro_auditoria) REFERENCES public.registro_auditoria(id);
+
+
+--
+-- Name: puesto_evaluacion puesto_evaluacion_id_puesto_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puesto_evaluacion
+    ADD CONSTRAINT puesto_evaluacion_id_puesto_fkey FOREIGN KEY (id_puesto) REFERENCES public.puesto(id);
+
+
+--
+-- Name: puesto puesto_id_registro_auditoria_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puesto
+    ADD CONSTRAINT puesto_id_registro_auditoria_fkey FOREIGN KEY (id_registro_auditoria) REFERENCES public.registro_auditoria(id);
+
+
+--
+-- Name: puntaje puntaje_id_competencia_evaluacion_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puntaje
+    ADD CONSTRAINT puntaje_id_competencia_evaluacion_fkey FOREIGN KEY (id_competencia_evaluacion) REFERENCES public.competencia_evaluacion(id);
+
+
+--
+-- Name: puntaje puntaje_id_cuestionario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puntaje
+    ADD CONSTRAINT puntaje_id_cuestionario_fkey FOREIGN KEY (id_cuestionario) REFERENCES public.cuestionario(id);
+
+
+--
+-- Name: puntuacion puntuacion_id_competencia_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puntuacion
+    ADD CONSTRAINT puntuacion_id_competencia_fkey FOREIGN KEY (id_competencia) REFERENCES public.competencia(id);
+
+
+--
+-- Name: puntuacion puntuacion_id_puesto_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.puntuacion
+    ADD CONSTRAINT puntuacion_id_puesto_fkey FOREIGN KEY (id_puesto) REFERENCES public.puesto(id);
+
+
+--
+-- Name: registro_auditoria registro_auditoria_id_consultor_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.registro_auditoria
+    ADD CONSTRAINT registro_auditoria_id_consultor_fkey FOREIGN KEY (id_consultor) REFERENCES public.consultor(id);
+
+
+--
+-- Name: respuesta respuesta_id_item_opcion_respuesta_cuestionario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.respuesta
+    ADD CONSTRAINT respuesta_id_item_opcion_respuesta_cuestionario_fkey FOREIGN KEY (id_item_opcion_respuesta_cuestionario) REFERENCES public.item_opcion_respuesta_cuestionario(id);
+
+
+--
+-- Name: respuesta respuesta_id_pregunta_cuestionario_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.respuesta
+    ADD CONSTRAINT respuesta_id_pregunta_cuestionario_fkey FOREIGN KEY (id_pregunta_cuestionario) REFERENCES public.pregunta_cuestionario(id);
